@@ -91,7 +91,14 @@ export default function Products() {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 2, sm: 2 }}>
             {products.map((item) => (
-              <Grid item xs={12} sm={6} md={3} key={item?.id}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={3}
+                key={item?.id}
+                className="product-grid"
+              >
                 <Card className="product-card">
                   <ProductImage item={item} />
                   <CardContent>
@@ -102,7 +109,7 @@ export default function Products() {
                       {item?.description}
                     </Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions className="addToCart">
                     <Button
                       variant="contained"
                       size="small"
