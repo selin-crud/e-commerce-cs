@@ -1,5 +1,6 @@
 import { Button } from "@mui/material"
 import { useDispatch } from "react-redux"
+import { setCarts } from "../../redux/saga/products/productSlice"
 import CartItem from "../cartItem/cartItem"
 import { Wrapper } from "./cart.styles"
 
@@ -7,7 +8,6 @@ const Cart = ({
   cartItems,
   addToCart,
   removeFromCart,
-  setCartItems,
   showCart,
   handleRemoveItem,
 }) => {
@@ -21,7 +21,7 @@ const Cart = ({
   }
 
   const clearCart = () => {
-    dispatch(setCartItems([]))
+    dispatch(setCarts([]))
   }
 
   return (

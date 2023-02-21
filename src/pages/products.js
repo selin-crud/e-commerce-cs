@@ -2,7 +2,6 @@ import {
   Box,
   Grid,
   Card,
-  CardMedia,
   CardContent,
   Typography,
   Button,
@@ -19,8 +18,7 @@ import { PRODUCT_REQUEST } from "../redux/saga/type"
 
 export default function Products() {
   const dispatch = useDispatch()
-  const { products } = useSelector((state) => state.products)
-  const [cartItems, setCartItems] = useState([])
+  const { products = [], carts = [] } = useSelector((state) => state.products)
   const [showCart, setShowCart] = useState({
     right: false,
   })
@@ -46,48 +44,49 @@ export default function Products() {
     getProducts()
   }, [])
 
+  const cartItemData = (clickedItem) => {
+    const isItemInCart = carts.find((item) => item.id === clickedItem.id)
+    if (isItemInCart) {
+      return carts.map((item) =>
+        item.id === clickedItem.id ? { ...item, amount: item.amount + 1 } : item
+      )
+    }
+    return [...carts, { ...clickedItem, amount: 1 }]
+  }
+
   const handleAddToCart = (clickedItem) => {
-    setCartItems((prev) => {
-      const isItemInCart = prev.find((item) => item.id === clickedItem.id)
-
-      if (isItemInCart) {
-        return prev.map((item) =>
-          item.id === clickedItem.id
-            ? { ...item, amount: item.amount + 1 }
-            : item
-        )
-      }
-
-      return [...prev, { ...clickedItem, amount: 1 }]
-    })
+    dispatch(setCarts(cartItemData(clickedItem)))
   }
 
   const handleRemoveCart = (id) => {
-    setCartItems((prev) =>
-      prev.reduce((acc, item) => {
-        if (item.id === id) {
-          if (item.amount === 1) return acc
-          return [...acc, { ...item, amount: item.amount - 1 }]
-        } else {
-          return [...acc, item]
-        }
-      }, [])
-    )
+    const removeCarts = carts.reduce((acc, item) => {
+      if (item.id === id) {
+        if (item.amount === 1) return acc
+        return [...acc, { ...item, amount: item.amount - 1 }]
+      } else {
+        return [...acc, item]
+      }
+    }, [])
+    dispatch(setCarts(removeCarts))
   }
 
   const handleRemoveItem = (id) => {
-    const data = cartItems.filter((item) => item.id !== id)
-    setCartItems(data)
+    const removeItem = carts.filter((item) => item.id !== id)
+    dispatch(setCarts(removeItem))
   }
 
-  useEffect(() => {
-    dispatch(setCarts(cartItems))
-  }, [cartItems])
+  const getTotalCarts = () => carts.reduce((acc, item) => acc + item.amount, 0)
 
   return (
     <>
-      <Header showCart={toggleDrawer("right", true)} />
+      <Header
+        showCart={toggleDrawer("right", true)}
+        totalCarts={getTotalCarts(carts)}
+      />
       <div className="product">
+        <div className="title">
+          <h5>Our Products</h5>
+        </div>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 2, sm: 2 }}>
             {products.map((item) => (
@@ -129,8 +128,7 @@ export default function Products() {
           onClose={toggleDrawer("right", false)}
         >
           <Cart
-            cartItems={cartItems}
-            setCartItems={setCartItems}
+            cartItems={carts}
             addToCart={handleAddToCart}
             removeFromCart={handleRemoveCart}
             showCart={toggleDrawer("right", false)}

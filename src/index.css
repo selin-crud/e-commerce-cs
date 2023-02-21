@@ -7,6 +7,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.title h5 {
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom: 3px solid #1976d2;
+  width: max-content;
+}
 .product {
   margin-top: 2rem;
 }

@@ -32,7 +32,6 @@ const CartItem = ({ item, addToCart, removeFromCart, handleRemoveItem }) => {
           <Button
             size="small"
             disableElevation
-            // variant="contained"
             onClick={() => handleRemoveItem(item.id)}
           >
             <DeleteIcon />

@@ -2,7 +2,6 @@ import * as React from "react"
 import { useTheme } from "@mui/material/styles"
 import Box from "@mui/material/Box"
 import MobileStepper from "@mui/material/MobileStepper"
-import Paper from "@mui/material/Paper"
 import SwipeableViews from "react-swipeable-views"
 import { autoPlay } from "react-swipeable-views-utils"
 
@@ -26,7 +25,7 @@ function ProductImage({ item }) {
         enableMouseEvents
       >
         {item?.images.map((step, index) => (
-          <div key={step.label}>
+          <div key={index}>
             {Math.abs(activeStep - index) <= 2 ? (
               <Box
                 component="img"
